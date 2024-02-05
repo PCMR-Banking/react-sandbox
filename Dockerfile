@@ -1,32 +1,20 @@
-#Use base image for node application 
-FROM node:19-alpine as builder
-# Set working directory to /app inside the container image 
-WORKDIR /app 
-# Copy app files 
+# Use an official Node runtime as a parent image
+FROM node:alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json for installing dependencies
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Bundle app source inside Docker image
 COPY . .
 
-# ====== BUILD ===== 
-# Install dependencies 
-RUN npm ci 
-# Build the app 
-RUN npm run build 
+# Build your Next.js app
+RUN npm run build
 
-# ===== RUN =====
-
-# Bundle static assets with nginx. nginx is used for serving application that are large scale
-FROM nginx:1.21.0-alpine as production
-
-# Set the env to production 
-ENV NODE_ENV production 
-
-# Copy built assets from `builder` image. The image build on first stage. Copy data from source to destination path 
-COPY --from=builder /app/build /usr/share/nginx/html 
-
-
-# Expose the port on which the app will be running 
-EXPOSE 80
-
-#Start the app for base image serving command 
-# CMD ["npx", "serve", "build"]
-
-CMD ["nginx", "-g", "daemon off;"]
+# Start the Next.js app
+CMD ["npm", "start"]
