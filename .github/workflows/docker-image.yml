@@ -23,4 +23,10 @@ jobs:
           context: .
           push: true
           tags: vaehaaland/nextjs-app:latest
-
+          build-args: |
+            AGILITY_GUID=${{ secrets.AGILITY_GUID }}
+            AGILITY_API_FETCH_KEY=${{ secrets.AGILITY_API_FETCH_KEY }}
+            AGILITY_API_PREVIEW_KEY=${{ secrets.AGILITY_API_PREVIEW_KEY }}
+            AGILITY_SECURITY_KEY=${{ secrets.AGILITY_SECURITY_KEY }}
+            AGILITY_LOCALES=${{ secrets.AGILITY_LOCALES }}
+            AGILITY_SITEMAP=${{ secrets.AGILITY_SITEMAP }}
